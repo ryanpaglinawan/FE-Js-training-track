@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Min - Max</title>
+</head>
+<body>
+
+Please enter any number.
+<input type="text" id="addNum">
+<br>
+
+<div id="min" ></div>
+<div id="max" ></div>
+<div id="numbers" ></div>
+  
+<script>
+const reference = {min:0, max:0};
+var validNumbers = [];
+
+//validate float
+function isFloat(val) {
+    var floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
+    if (!floatRegex.test(val))
+        return false;
+
+    val = parseFloat(val);
+    if (isNaN(val))
+        return false;
+    return true;
+}
+
+function checkMinMax(e){
+  if(e.keyCode!==13)
+    return;
+  
+  //if enter key detected, get input number
+  let setNumber = document.getElementById("addNum").value;
+  if(isFloat(setNumber)){
+    validNumbers.push(setNumber); //push to array
+    validNumbers = [...new Set(validNumbers)]; //make it unique
+  }
+
+  document.getElementById("addNum").value = ''; //clear input
+  document.getElementById("numbers").innerHTML = (validNumbers.length)? "Numbers: <ul><li>" + validNumbers.join("</li><li>") + "</li></ul>" : ''; //list valid numbers
+  
+  if(validNumbers.length<=1)
+    return;
+  
+  //show mix-max values
+  validNumbers.map(n => {
+    if(reference.min===0  || parseFloat(n)<=parseFloat(reference.min))
+        reference.min = n;
+        
+    if(reference.max===0  || parseFloat(n)>=parseFloat(reference.max))
+        reference.max = n;
+  });
+  document.getElementById("min").innerHTML = 'Min: <b>' + reference.min; + '</b>'
+  document.getElementById("max").innerHTML = 'Max: <b>' + reference.max + '</b>';
+}
+
+window.onload = function() { document.getElementById("addNum").focus(); }
+window.addEventListener('keydown', checkMinMax);  //addListiner
+</script>
+
+
+</body>
+</html>
