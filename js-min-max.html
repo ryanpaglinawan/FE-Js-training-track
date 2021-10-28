@@ -15,7 +15,7 @@ Please enter any number.
 <div id="numbers" ></div>
   
 <script>
-const reference = {min:0, max:0};
+const reference = {max: null, min: null};
 var validNumbers = [];
 
 //validate float
@@ -30,6 +30,10 @@ function isFloat(val) {
     return true;
 }
 
+function posDiff(num1, num2){
+    return ((num1-num2)>0)? true:false;
+}
+
 function checkMinMax(e){
   if(e.keyCode!==13)
     return;
@@ -37,7 +41,7 @@ function checkMinMax(e){
   //if enter key detected, get input number
   let setNumber = document.getElementById("addNum").value;
   if(isFloat(setNumber)){
-    validNumbers.push(setNumber); //push to array
+    validNumbers.push(parseFloat(setNumber)); //push to array
     validNumbers = [...new Set(validNumbers)]; //make it unique
   }
 
@@ -48,14 +52,20 @@ function checkMinMax(e){
     return;
   
   //show mix-max values
-  validNumbers.map(n => {
-    if(reference.min===0  || parseFloat(n)<=parseFloat(reference.min))
-        reference.min = n;
-        
-    if(reference.max===0  || parseFloat(n)>=parseFloat(reference.max))
-        reference.max = n;
+  validNumbers.map( (n, i) => {
+    let diff = 0, minuend = n, subtrahend = validNumbers[i+1];
+    if(subtrahend!==undefined){
+        if( posDiff(minuend, subtrahend) ){
+            reference.max = posDiff(reference.max, minuend) ? reference.max : minuend;
+            reference.min = (reference.min!==null) ? (posDiff(reference.min, subtrahend) ? subtrahend : reference.min) : subtrahend;
+        }else{
+            reference.max = posDiff(reference.max, subtrahend) ? reference.max : subtrahend;
+            reference.min = (reference.min!==null) ? (posDiff(reference.min, minuend) ? minuend : reference.min) : minuend;
+        }
+    }
   });
-  document.getElementById("min").innerHTML = 'Min: <b>' + reference.min; + '</b>'
+
+  document.getElementById("min").innerHTML = 'Min: <b>' + reference.min + '</b>'
   document.getElementById("max").innerHTML = 'Max: <b>' + reference.max + '</b>';
 }
 
