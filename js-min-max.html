@@ -20,18 +20,19 @@ var validNumbers = [];
 
 //validate float
 function isFloat(val) {
-    var floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
-    if (!floatRegex.test(val))
-        return false;
+  var floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
+  if (!floatRegex.test(val))
+    return false;
 
-    val = parseFloat(val);
-    if (isNaN(val))
-        return false;
-    return true;
+  val = parseFloat(val);
+  if (isNaN(val))
+    return false;
+
+  return true;
 }
 
 function posDiff(num1, num2){
-    return ((num1-num2)>0)? true:false;
+  return ((num1 - num2) > 0) ? true : false;
 }
 
 function checkMinMax(e){
@@ -55,13 +56,13 @@ function checkMinMax(e){
   validNumbers.map( (n, i) => {
     let diff = 0, minuend = n, subtrahend = validNumbers[i+1];
     if(subtrahend!==undefined){
-        if( posDiff(minuend, subtrahend) ){
-            reference.max = posDiff(reference.max, minuend) ? reference.max : minuend;
-            reference.min = (reference.min!==null) ? (posDiff(reference.min, subtrahend) ? subtrahend : reference.min) : subtrahend;
-        }else{
-            reference.max = posDiff(reference.max, subtrahend) ? reference.max : subtrahend;
-            reference.min = (reference.min!==null) ? (posDiff(reference.min, minuend) ? minuend : reference.min) : minuend;
-        }
+      if (posDiff(minuend, subtrahend)) {
+        reference.max = posDiff(reference.max, minuend) ? reference.max : minuend;
+        reference.min = (reference.min !== null) ? (posDiff(reference.min, subtrahend) ? subtrahend : reference.min) : subtrahend;
+      } else {
+        reference.max = posDiff(reference.max, subtrahend) ? reference.max : subtrahend;
+        reference.min = (reference.min !== null) ? (posDiff(reference.min, minuend) ? minuend : reference.min) : minuend;
+      }
     }
   });
 
